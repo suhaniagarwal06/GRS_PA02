@@ -272,4 +272,3 @@ This reproduces:
 
 ---
 
-# End of README
