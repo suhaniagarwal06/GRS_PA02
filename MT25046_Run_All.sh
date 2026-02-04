@@ -10,8 +10,8 @@ make clean >/dev/null 2>&1
 
 # ---------- Run experiments ----------
 echo "[2/3] Running experiments (~4–5 minutes)..."
-chmod +x MT25XXX_Part_C_RunExperiments.sh
-sudo ./MT25XXX_Part_C_RunExperiments.sh
+chmod +x MT25046_Part_C_RunExperiments.sh
+sudo ./MT25046_Part_C_RunExperiments.sh
 
 if [ $? -ne 0 ]; then
     echo "❌ Experiment script failed."
@@ -22,7 +22,7 @@ echo "✔ CSV generated."
 
 # ---------- Generate plots ----------
 echo "[3/3] Generating plots (PNG files inside ./plots)..."
-python3 MT25XXX_Part_D_Plots.py
+python3 MT25046_Part_D_Plots.py
 
 echo "========================================"
 echo " PA02 RUN COMPLETE"

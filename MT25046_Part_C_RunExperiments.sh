@@ -7,7 +7,7 @@ MESSAGE_SIZES=(1024 4096 16384 65536)
 THREAD_COUNTS=(1 2 4 8)
 IMPLEMENTATIONS=("A1" "A2" "A3")
 
-CSV="MT25XXX_Part_C_Results.csv"
+CSV="MT25046_Part_C_Results.csv"
 
 # rm -f "$CSV"
 # echo "Impl,MsgSize,Threads,ThroughputGbps,LatencyUs,CPUCycles,CacheMisses,ContextSwitches" >> "$CSV"
@@ -23,8 +23,8 @@ run_test() {
     SIZE=$2
     THREADS=$3
 
-    SERVER="./MT25XXX_Part_${IMPL}_Server"
-    CLIENT="./MT25XXX_Part_${IMPL}_Client"
+    SERVER="./MT25046_Part_${IMPL}_Server"
+    CLIENT="./MT25046_Part_${IMPL}_Client"
 
     $SERVER $PORT $SIZE > server.log 2>&1 &
     SERVER_PID=$!
