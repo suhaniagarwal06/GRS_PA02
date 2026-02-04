@@ -9,11 +9,11 @@
 
 This assignment experimentally evaluates the **cost of data movement in network I/O** by comparing:
 
-* **Two-copy socket communication (A1)**
-* **One-copy optimized communication (A2)**
-* **Zero-copy communication using `MSG_ZEROCOPY` (A3)**
+* **Two-copy socket communication (A1) — `Baseline using send() / recv()`**
+* **One-copy optimized communication (A2)  — `Using sendmsg() with scatter-gather I/O`**
+* **Zero-copy communication — `Using MSG_ZEROCOPY with page pinning`**
 
-All implementations are **multithreaded TCP client–server programs** and are profiled using the **Linux `perf` tool** to study:
+All implementations are **multithreaded and profiled using Linux `perf`** within isolated network namespaces to ensure accurate measurement of the Linux kernel network stack:
 
 * Throughput
 * Latency
@@ -50,7 +50,48 @@ MT25046_PA02/
 
 ---
 
-# 3. Compilation Instructions
+# 3. Technical Enhancements for Hybrid Architectures
+This repository includes specific handling for Intel Hybrid CPUs (Performance + Efficiency cores):
+
+* Explicit PMU targeting
+  `perf` events are collected from `cpu_core` to avoid `<not supported>` errors on E-cores.
+
+* Core pinning
+  Uses `taskset -c 0` to pin profiling tasks to P-cores for stable measurements.
+
+* Server-side profiling
+  The script captures `SERVER_PID` and profiles the sender side, which is essential for:
+
+  * Scatter-gather cost measurement
+
+  * `MSG_ZEROCOPY` DMA behavior analysis
+
+---
+ 
+# 4. Network Namespace Isolation
+To satisfy strict PA02 requirements, communication is not done via localhost.
+
+Instead:
+
+* Create namespaces:
+
+  * ns_server
+
+  * ns_client
+
+* Connect them using a veth pair
+
+* Assign IPs:
+
+  * Server → 10.0.0.1
+
+  * Client → 10.0.0.2
+
+* Force packets through the full Linux kernel network stack
+
+---
+
+# 5. Compilation Instructions
 
 Compile all implementations using:
 
@@ -71,7 +112,7 @@ Compiler flags:
 
 ---
 
-# 4. Running Experiments (Part-C)
+# 6. Running Experiments (Part-C)
 
 Automated experiment script:
 
@@ -97,17 +138,16 @@ sudo ./MT25046_Part_C_RunExperiments.sh
 MT25046_Part_C_Results.csv
 ```
 
-### No manual intervention is required.
-
 ---
 
-# 5. Plot Generation (Part-D)
+# 7. Plot Generation (Part-D)
 
 Plots are generated using:
 
 ```
 python3 MT25046_Part_D_Plots.py
 ```
+---
 
 ### Important PA02 compliance:
 
@@ -145,7 +185,7 @@ removes:
 
 ---
 
-# 6. Implementation Details (Part-A)
+# 8. Implementation Details (Part-A)
 
 ## A1 — Two-Copy Communication
 
@@ -201,7 +241,7 @@ Benefits:
 
 ---
 
-# 7. Measurements Collected (Part-B)
+# 9. Measurements Collected (Part-B)
 
 For each configuration:
 
@@ -219,7 +259,7 @@ Total experiments:
 
 ---
 
-# 8. AI Usage Declaration
+# 10. AI Usage Declaration
 
 AI tools were used for:
 
@@ -238,7 +278,7 @@ No blind code submission was performed.
 
 ---
 
-# 9. How to Reproduce Results
+# 11. How to Reproduce Results
 
 ```
 make clean
@@ -255,7 +295,7 @@ This reproduces:
 
 ---
 
-# 10. Notes for Evaluation
+# 12. Notes for Evaluation
 
 * Code is **modular, commented, and structured**
 * Automation is **fully reproducible**
@@ -264,11 +304,10 @@ This reproduces:
 
 ---
 
-# 11. Author
+# 13. Author
 
 **Roll Number:** MT25046
 **Course:** CSE638 — Graduate Systems
 **Institute:** IIIT Delhi
 
 ---
-
