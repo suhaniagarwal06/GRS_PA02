@@ -12,7 +12,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 system_info = "System: Linux | CPU: x86_64 (Hybrid) | Threads: 1, 2, 4, 8"
 msg_sizes = [1024, 4096, 16384, 65536]
-msg_labels = ['1KmagentaB', '4KB', '16KB', '64KB']
+msg_labels = ['1KB', '4KB', '16KB', '64KB']
 threads = [1, 2, 4, 8]
 
 # ---------------------------------------------------------
