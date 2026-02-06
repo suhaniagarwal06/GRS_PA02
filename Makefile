@@ -1,5 +1,4 @@
 # MT25046 - PA02 Makefile
-# Uses -O2 for realistic profiling and -pthread for multithreading.
 
 CC = gcc
 CFLAGS = -Wall -O2 -pthread
